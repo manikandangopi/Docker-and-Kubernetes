@@ -1,0 +1,104 @@
+# T04 – Docker Default Parameters
+
+This folder covers Docker default parameters, package verification, daemon info, and user permissions.
+
+---
+
+<details>
+<summary>1. Verify Docker Package Installation</summary>
+
+Check if `docker-ce` and `docker-cli` are installed in the VM.
+
+```bash
+dpkg -l | grep docker-ce
+Explanation:
+
+dpkg -l → Lists all installed packages
+
+grep docker-ce → Filters output to show Docker-related packages
+
+</details> <details> <summary>2. Verify Docker Compose Plugin Installation</summary>
+dpkg -l | grep docker-compose-plugin
+
+</details> <details> <summary>3. Verify Docker Version</summary>
+docker --version
+
+</details> <details> <summary>4. Detailed Docker Info</summary>
+docker info
+
+
+Key Information Displayed:
+
+Docker client & server info
+
+Container status & images
+
+Cgroup driver & version
+
+Plugins (volumes, network)
+
+Docker Swarm status
+
+Default runtime
+
+Docker host OS kernel
+
+Docker root directory
+
+</details> <details> <summary>5. Docker Root Directory</summary>
+
+Default Docker root directory: /var/lib/docker
+
+To list files:
+
+ls -l /var/lib/docker/
+
+</details> <details> <summary>6. Default Docker Registry</summary>
+
+Registry URL: https://index.docker.io/v1/
+
+Docker images from this path are downloaded locally by Docker CLI to create containers.
+
+</details> <details> <summary>7. Normal User Permissions</summary>
+
+By default, non-root users have restrictions.
+
+Running docker info as a normal user shows client info only, not server details.
+
+</details> <details> <summary>8. Allow Normal User to Run Docker Commands</summary>
+
+Step 1: Check Docker Group
+
+cat /etc/group | grep docker
+cat /etc/passwd | grep docker
+
+
+Step 2: Add User to Docker Group
+
+sudo usermod -aG docker testuser
+cat /etc/group | grep docker
+
+
+Step 3: Restart Docker Service
+
+sudo systemctl restart docker
+sudo systemctl status docker
+
+
+Docker service should be active (running).
+
+Step 4: Test as Normal User
+
+su - testuser
+docker info
+
+
+If commands still fail, reboot the VM:
+
+sudo reboot
+
+
+After relogin, docker info should work.
+
+Note: Docker CLI connects to the server via /var/run/docker.sock.
+
